@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using YourAPP_Persistence.Data.DbContext;
 
 var builder = WebApplication.CreateBuilder(args);
