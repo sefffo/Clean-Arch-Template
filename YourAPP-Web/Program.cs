@@ -10,8 +10,11 @@ builder.Services.AddOpenApi();
 
 #region Dependency Injection / Registrerations
 
+// NOTE: Make sure to add the matching EF Core provider NuGet package to YourAPP-Persistence.csproj
+// e.g. Microsoft.EntityFrameworkCore.SqlServer  --> UseSqlServer
+//      Npgsql.EntityFrameworkCore.PostgreSQL    --> UseNpgsql
 builder.Services.AddDbContext<YourAPPDbContext>(options =>
-              options.(builder.Configuration.GetConnectionString("DefaultConnection")));
+              options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 #endregion
 
