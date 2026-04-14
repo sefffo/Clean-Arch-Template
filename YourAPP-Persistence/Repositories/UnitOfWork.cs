@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Text;
 using YourAPP_Domain.Entities;
 using YourAPP_Domain.Interfaces;
+using YourAPP_Persistence.Data.DbContext;
 
 namespace YourAPP_Persistence.Repositories
 {
-    public class UnitOfWork
+    public class UnitOfWork(YourAPPDbContext context)
     {
 
         private readonly Dictionary<Type, object> repositories = [];
