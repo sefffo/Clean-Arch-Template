@@ -1,3 +1,5 @@
+using YourAPP_Persistence.Data.DbContext;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -5,6 +7,15 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
+#region Dependency Injection / Registrerations
+
+builder.Services.AddDbContext<YourAPPDbContext>(options =>
+              options.(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+#endregion
+
+
 
 var app = builder.Build();
 
