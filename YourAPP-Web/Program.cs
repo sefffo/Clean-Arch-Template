@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Scalar.AspNetCore;
 using YourAPP_Persistence.Data.DbContext;
 using YourAPP_Persistence.DI;
 using YourAPP_Services.FluentValidationMiddleWare;
@@ -9,7 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-//builder.Services.AddOpenApi();
+builder.Services.AddOpenApi();
 
 #region Dependency Injection / Registrerations
 
@@ -49,10 +50,9 @@ var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    app.MapOpenApi();           // serves → /openapi/v1.json
+    app.MapScalarApiReference(); // UI → /scalar/v1
 }
-
 
 app.UseHttpsRedirection();
 
