@@ -7,7 +7,7 @@ using YourAPP_Persistence.Data.DbContext;
 
 namespace YourAPP_Persistence.Repositories
 {
-    public class UnitOfWork(YourAPPDbContext context)
+    public class UnitOfWork(YourAPPDbContext context) : IUnitOfWork
     {
 
         private readonly Dictionary<Type, object> repositories = [];

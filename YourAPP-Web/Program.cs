@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using YourAPP_Persistence.Data.DbContext;
+using YourAPP_Persistence.DI;
 using YourAPP_Services.FluentValidationMiddleWare;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -25,12 +26,18 @@ builder.Services.AddDbContext<YourAPPDbContext>(options =>
 #endregion
 
 
-#region Service Registerations
+#region AppService Registerations
 
 builder.Services.AddApplicationServices();
 
 #endregion
 
+
+#region Persistence Registerations
+
+builder.Services.AddPersistenceServicesRegistration();
+
+#endregion
 
 
 #endregion
