@@ -6,58 +6,41 @@ using YourAPP_Services.FluentValidationMiddleWare;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+
+#region OpenAPI / Scalar
 builder.Services.AddOpenApi();
+#endregion
 
-#region Dependency Injection / Registrerations
+#region Dependency Injection
 
-#region DB Registerations and Connections
+#region DB
 // NOTE: Make sure to add the matching EF Core provider NuGet package to YourAPP-Persistence.csproj
 // e.g. Microsoft.EntityFrameworkCore.SqlServer  --> UseSqlServer
 //      Npgsql.EntityFrameworkCore.PostgreSQL    --> UseNpgsql
-//builder.Services.AddDbContext<YourAPPDbContext>(options =>
-//              options.UseSqlServer(builder.Configuration.GetConnectionString("")));
-
 builder.Services.AddDbContext<YourAPPDbContext>(options =>
-              options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 #endregion
 
-
-#region AppService Registerations
-
+#region Application Services
 builder.Services.AddApplicationServices();
-
 #endregion
 
-
-#region Persistence Registerations
-
+#region Persistence
 builder.Services.AddPersistenceServicesRegistration();
-
 #endregion
 
-
 #endregion
-
-
 
 var app = builder.Build();
 
-
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();           // serves → /openapi/v1.json
+    app.MapOpenApi();            // serves → /openapi/v1.json
     app.MapScalarApiReference(); // UI → /scalar/v1
 }
 
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
 app.MapControllers();
-
 app.Run();
