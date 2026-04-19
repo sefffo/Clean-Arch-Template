@@ -1,10 +1,1 @@
-namespace Application_Layer_temp.Exceptions;
-
-public class ForbiddenException : Exception
-{
-    public ForbiddenException()
-        : base("You do not have permission to perform this action.") { }
-
-    public ForbiddenException(string message)
-        : base(message) { }
-}
+// This file is intentionally left empty. Exceptions have been moved to YourAPP-Services/Exceptions/

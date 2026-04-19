@@ -1,6 +1,6 @@
-using Application_Layer_temp.Exceptions;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
+using YourAPP_Services.Exceptions;
 
 namespace YourAPP_Web.CustomMiddlewares;
 
@@ -13,11 +13,10 @@ public class ExceptionHandlerMiddleware(
         try
         {
             await next.Invoke(httpContext);
-            await HandleNotFoundEndPointAsync(httpContext); // handles empty 404s (no route matched)
+            await HandleNotFoundEndPointAsync(httpContext);
         }
         catch (ValidationException ex)
         {
-            // FluentValidation pipeline threw — group errors by field
             logger.LogWarning("Validation failed at {Method} {Path}: {ValidationErrors}",
                 httpContext.Request.Method,
                 httpContext.Request.Path,
@@ -43,7 +42,6 @@ public class ExceptionHandlerMiddleware(
         }
         catch (Exception ex)
         {
-            // log everything — full stack trace goes to logs
             logger.LogError(ex,
                 "Exception [{ExceptionType}] at {Method} {Path} — {Message}",
                 ex.GetType().Name,
@@ -51,7 +49,6 @@ public class ExceptionHandlerMiddleware(
                 httpContext.Request.Path,
                 ex.Message);
 
-            // map exception type → HTTP status code
             var statusCode = ex switch
             {
                 NotFoundException           => StatusCodes.Status404NotFound,
@@ -64,7 +61,6 @@ public class ExceptionHandlerMiddleware(
                 _                           => StatusCodes.Status500InternalServerError
             };
 
-            // known exceptions → show message | unknown → hide internals from client
             var detail = ex switch
             {
                 NotFoundException           => ex.Message,
@@ -98,13 +94,10 @@ public class ExceptionHandlerMiddleware(
                     ["exceptionType"] = ex.GetType().Name,
                     ["traceId"]       = httpContext.TraceIdentifier,
                     ["timestamp"]     = DateTime.UtcNow,
-                    // only expose stackTrace in Development
                     ["stackTrace"]    = IsDevEnvironment() ? ex.StackTrace : null
                 });
         }
     }
-
-    // ── Handles routes that don't exist (no exception thrown, just empty 404) ──────
 
     private static async Task HandleNotFoundEndPointAsync(HttpContext httpContext)
     {
@@ -123,8 +116,6 @@ public class ExceptionHandlerMiddleware(
         }
     }
 
-    // ── Single writer — every response goes through here ─────────────────────────
-
     private static async Task WriteProblemAsync(
         HttpContext httpContext,
         int statusCode,
@@ -137,19 +128,17 @@ public class ExceptionHandlerMiddleware(
             Title    = title,
             Detail   = detail,
             Status   = statusCode,
-            Instance = $"{httpContext.Request.Method} {httpContext.Request.Path}" // e.g. "POST /api/products/999"
+            Instance = $"{httpContext.Request.Method} {httpContext.Request.Path}"
         };
 
         foreach (var (key, value) in extensions)
             problem.Extensions[key] = value;
 
         httpContext.Response.StatusCode  = statusCode;
-        httpContext.Response.ContentType = "application/problem+json"; // RFC 7807 MIME type
+        httpContext.Response.ContentType = "application/problem+json";
 
         await httpContext.Response.WriteAsJsonAsync(problem);
     }
-
-    // ── Only show stackTrace in Development ───────────────────────────────────────
 
     private static bool IsDevEnvironment()
         => Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development";

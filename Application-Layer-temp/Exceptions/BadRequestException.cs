@@ -1,7 +1,1 @@
-namespace Application_Layer_temp.Exceptions;
-
-public class BadRequestException : Exception
-{
-    public BadRequestException(string message)
-        : base(message) { }
-}
+// This file is intentionally left empty. Exceptions have been moved to YourAPP-Services/Exceptions/
