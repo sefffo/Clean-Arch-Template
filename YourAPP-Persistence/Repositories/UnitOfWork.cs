@@ -13,6 +13,9 @@ namespace YourAPP_Persistence.Repositories
         private readonly Dictionary<Type, object> repositories = [];
         public IGenericRepository<TEntity, TKey> GetRepository<TEntity, TKey>() where TEntity : BaseEntity<TKey>
         {
+
+            //check the dictionary if the repository for the given entity type already exists, if it does return it,
+            //otherwise create a new one and add it to the dictionary before returning it
             var EntityType = typeof(TEntity);
             if (repositories.TryGetValue(EntityType, out object? repository))
                 return (IGenericRepository<TEntity, TKey>)repository;
