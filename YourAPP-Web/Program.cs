@@ -17,11 +17,11 @@ builder.Services.AddOpenApi();
 // NOTE: Make sure to add the matching EF Core provider NuGet package to YourAPP-Persistence.csproj
 // e.g. Microsoft.EntityFrameworkCore.SqlServer  --> UseSqlServer
 //      Npgsql.EntityFrameworkCore.PostgreSQL    --> UseNpgsql
-builder.Services.AddDbContext<YourAPPDbContext>(options =>
-              options.UseSqlServer(builder.Configuration.GetConnectionString("")));
+//builder.Services.AddDbContext<YourAPPDbContext>(options =>
+//              options.UseSqlServer(builder.Configuration.GetConnectionString("")));
 
 builder.Services.AddDbContext<YourAPPDbContext>(options =>
-              options.UseSqlServer(builder.Configuration.GetConnectionString("")));
+              options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 #endregion
 
