@@ -35,7 +35,6 @@ builder.Services.AddPersistenceServicesRegistration();
 
 var app = builder.Build();
 
-// ← MUST be first — catches all exceptions from everything below
 app.UseMiddleware<ExceptionHandlerMiddleware>();
 
 if (app.Environment.IsDevelopment())
