@@ -3,6 +3,7 @@ using Scalar.AspNetCore;
 using YourAPP_Persistence.Data.DbContext;
 using YourAPP_Persistence.DI;
 using YourAPP_Services.FluentValidationMiddleWare;
+using YourAPP_Web.CustomMiddlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,6 +34,9 @@ builder.Services.AddPersistenceServicesRegistration();
 #endregion
 
 var app = builder.Build();
+
+// ← MUST be first — catches all exceptions from everything below
+app.UseMiddleware<ExceptionHandlerMiddleware>();
 
 if (app.Environment.IsDevelopment())
 {
