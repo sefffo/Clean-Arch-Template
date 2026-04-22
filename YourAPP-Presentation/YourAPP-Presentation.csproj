@@ -11,8 +11,8 @@
     <ProjectReference Include="..\YourAPP-Services-Implementation\YourAPP-Services-Abstraction.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
+	<ItemGroup>
+		<FrameworkReference Include="Microsoft.AspNetCore.App"></FrameworkReference>
+	</ItemGroup>
 
 </Project>
